@@ -251,7 +251,7 @@ module top(
     ((headx - headx23 == 0) & (heady - heady23 == 0)) |
     ((headx - headx24 == 0) & (heady - heady24 == 0)) |
     ((headx - headx25 == 0) & (heady - heady25 == 0)) |
-     (headx <= 60 | headx >= 580 | heady <= 60 | heady >= 420)) //Collision border
+     (headx <= 0 | headx >= 640 | heady <= 60 | heady >= 480)) //Collision border
         begin
             score = 0;
             len = 2;
@@ -473,7 +473,7 @@ module top(
     //object defining section
     always@(*)
     begin
-    square = (x>60) & (x<580) & (y>60) & (y< 420); // storing all the pixels within the gamearea background
+    square = (x>0) & (x<640) & (y>50) & (y<60); // storing all the pixels within the gamearea background
     
     snake = (x > headx) & (x < headx + 20) & (y>heady) & (y<heady + 20); // storing all pixels inside 20x20 square
                                                                          // with top left corner headx,heady
@@ -514,10 +514,9 @@ module top(
     always@(*)
     begin 
         
-        vgaGreen[3] = square & ~(snake|food) ; // everything in gamearea except snake's head and food will be green
-        vgaBlue[3] = food; // food will be blue
-       vgaRed[3] = snake | snake1 | snake2 | snake3 | snake4 | snake5 | snake6 | snake7 | snake8 | snake9 | snake10 | snake11 | snake12 | snake13 | snake14| snake15| snake16| snake17| snake18| snake19| snake20| snake21| snake22| snake23| snake24| snake25| food;
-        
+        vgaGreen[3] = food ; // = 1000
+        vgaBlue[3] =  snake | snake1 | snake2 | snake3 | snake4 | snake5 | snake6 | snake7 | snake8 | snake9 | snake10 | snake11 | snake12 | snake13 | snake14| snake15| snake16| snake17| snake18| snake19| snake20| snake21| snake22| snake23| snake24| snake25; // food will be blue
+        vgaRed[3] =  square & ~(food |snake | snake1 | snake2 | snake3 | snake4 | snake5 | snake6 | snake7 | snake8 | snake9 | snake10 | snake11 | snake12 | snake13 | snake14| snake15| snake16| snake17| snake18| snake19| snake20| snake21| snake22| snake23| snake24| snake25) ; // = 10
        
         // whole body of snake and food will be red
         
