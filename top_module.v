@@ -259,7 +259,7 @@ module top(
     ((headx - headx23 == 0) & (heady - heady23 == 0)) |
     ((headx - headx24 == 0) & (heady - heady24 == 0)) |
     ((headx - headx25 == 0) & (heady - heady25 == 0)) |
-     (headx <= 0 | headx >= 640 | heady <= 60 | heady >= 480)) //Collision border
+     (headx <= 0 | headx >= 620 | heady <= 70 | heady >= 450)) //Collision border
         begin
             score = 0;
             len = 2;
@@ -482,7 +482,7 @@ module top(
     //object defining section
     always@(*)
     begin
-    square = (x>0) & (x<640) & (y>50) & (y<60); // storing all the pixels within the gamearea background
+    square = (x>0) & (x<640) & ( ((y>60) & (y<70)) | ((y>470)&(y<480)))  ; // storing all the pixels within the gamearea background
     
     snake = (x > headx) & (x < headx + 20) & (y>heady) & (y<heady + 20); // storing all pixels inside 20x20 square
                                                                          // with top left corner headx,heady
@@ -537,4 +537,3 @@ module top(
     
 
 endmodule
-
