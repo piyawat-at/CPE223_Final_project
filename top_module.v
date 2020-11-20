@@ -22,7 +22,7 @@
 
 module top(
     input wire clk,             // board clock: 100 MHz on Arty/Basys3/Nexys
-    input U,L,D,R,S,
+    input U,L,D,R,
     output wire VGA_HS_O,       // horizontal sync output
     output wire VGA_VS_O,       // vertical sync output
     output reg [3:0] vgaRed,    // 4-bit VGA red output
@@ -209,13 +209,21 @@ module top(
         div <=div + 1;   // div controls speed of snake. It increases till 16, then resets to 0 
     end  
    
-    always@(posedge div[3])
+    always@(posedge div[speed])
     begin
     
     //if ((score % 7 == 0) & (speed > 0))
-    if (score % 7 == 0)
+    if (len==5)
     begin
-        speed <= speed - 1;
+        speed = 3;
+    end
+    else if (len==12)
+    begin
+        speed = 2;
+    end
+    else if (len==20)
+    begin
+        speed = 1;
     end
     
     if((((headx - foodx <= 20) & (headx - foodx >= 0)) || ((foodx - headx >= 0) & (foodx - headx <= 20))) 
@@ -255,6 +263,7 @@ module top(
         begin
             score = 0;
             len = 2;
+            speed = 4;
             headx = 200;
             heady = 150;
             headx1 = 200;
