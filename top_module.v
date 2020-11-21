@@ -64,7 +64,13 @@ module top(
         .animate(animate) //Output
     ); 
     
+     // length of the snake
+    
+    wire seg_wire ;
+    reg [6:0] seg ;
      
+
+    
     // Printing Objects
      reg square; //background gamearea
      reg snake; //head of the snake
@@ -94,6 +100,16 @@ module top(
      reg snake24;
      reg snake25;
      reg food;
+     
+     
+     reg sega;
+     reg segb;
+     reg segc;
+     reg segd;
+     reg sege;
+     reg segf;
+     reg segg;
+     reg segh; 
      
      
      // coordinates for every block.  
@@ -156,6 +172,7 @@ module top(
     reg [8:0] heady24 = -1;
     reg [9:0] headx25 = -1;
     reg [8:0] heady25 = -1;
+
     
    
     // first food block will be at 300,200. next blocks will have pseudorandom coordinates
@@ -165,7 +182,7 @@ module top(
      
     reg [4:0] div = 0; // controls the speed of snake. Rises to 16, then resets to 0.
     integer len = 2;
-    integer score = 0; // length of the snake
+    reg [7:0] score= 0 ;
     reg flag = 1; // initial condition. Flag remains 0 throughout the code
     reg foodeat = 0; // checks whether food is being eaten. Triggers new block generation.
     integer speed = 4;
@@ -233,6 +250,9 @@ module top(
         len = len + 1; // increase length by 1 if food block is being eaten.
         foodeat = 1; // set foodeat=1 to triger new food block generation
         score = score + 1;
+        
+        
+        
         end
         
     if(((headx - headx2 == 0) & (heady - heady2 == 0)) |
@@ -259,7 +279,7 @@ module top(
     ((headx - headx23 == 0) & (heady - heady23 == 0)) |
     ((headx - headx24 == 0) & (heady - heady24 == 0)) |
     ((headx - headx25 == 0) & (heady - heady25 == 0)) |
-     (headx <= 0 | headx >= 620 | heady <= 70 | heady >= 450)) //Collision border
+    (headx <= 0 | headx >= 620 | heady <= 70 | heady >= 450)) //Collision border
         begin
             score = 0;
             len = 2;
@@ -479,9 +499,65 @@ module top(
         
     end   
     
-    //object defining section
     always@(*)
     begin
+     case(score%10)
+            0 : seg = 7'b1111110;
+            1 : seg = 7'b0110000;
+            2 : seg = 7'b1101101;
+            3 : seg = 7'b1111001;
+            4 : seg = 7'b0110011;
+            5 : seg = 7'b1011011;
+            6 : seg = 7'b1011111;
+            7 : seg = 7'b1110010;
+            8 : seg = 7'b1111111;
+            9 : seg = 7'b1111011; 
+        default : seg = 7'b1111110;
+        endcase
+    
+    if(seg[6] == 1)
+        sega = (((x>15) & (x<27)) & ((y>10) & (y<15)));
+    else 
+        sega = 0;
+        
+     if(seg[5] == 1)
+        segb = (((x>27) & (x<32)) & ((y>15) & (y<27)));
+    else 
+        segb = 0;
+        
+     if(seg[4] == 1)
+        segc = (((x>27) & (x<32)) & ((y>32) & (y<44)));
+    else 
+        segc = 0;
+        
+      if(seg[3] == 1)
+        segd = (((x>15) & (x<27)) & ((y>44) & (y<49)));
+    else 
+        segd = 0;
+        
+     if(seg[2] == 1)
+        sege = (((x>10) & (x<15)) & ((y>32) & (y<44)));
+    else 
+        sege = 0;
+        
+     if(seg[1] == 1)
+        segf = (((x>10) & (x<15)) & ((y>15) & (y<27)));
+    else 
+        segf = 0;
+        
+     if(seg[0] == 1)
+        segg = (((x>15) & (x<27)) & ((y>27) & (y<32)));
+    else 
+        segg = 0;
+        
+        
+        
+        
+        
+    
+
+    
+    
     square = (x>0) & (x<640) & ( ((y>60) & (y<70)) | ((y>470)&(y<480)))  ; // storing all the pixels within the gamearea background
     
     snake = (x > headx) & (x < headx + 20) & (y>heady) & (y<heady + 20); // storing all pixels inside 20x20 square
@@ -525,7 +601,7 @@ module top(
         
         vgaGreen[3] = food ; // = 1000
         vgaBlue[3] =  snake | snake1 | snake2 | snake3 | snake4 | snake5 | snake6 | snake7 | snake8 | snake9 | snake10 | snake11 | snake12 | snake13 | snake14| snake15| snake16| snake17| snake18| snake19| snake20| snake21| snake22| snake23| snake24| snake25; // food will be blue
-        vgaRed[3] =  square & ~(food |snake | snake1 | snake2 | snake3 | snake4 | snake5 | snake6 | snake7 | snake8 | snake9 | snake10 | snake11 | snake12 | snake13 | snake14| snake15| snake16| snake17| snake18| snake19| snake20| snake21| snake22| snake23| snake24| snake25) ; // = 10
+        vgaRed[3] =  sega | segb | segc | segd | sege | segf | segg | square & ~(food |snake | snake1 | snake2 | snake3 | snake4 | snake5 | snake6 | snake7 | snake8 | snake9 | snake10 | snake11 | snake12 | snake13 | snake14| snake15| snake16| snake17| snake18| snake19| snake20| snake21| snake22| snake23| snake24| snake25) ; // = 10
        
         // whole body of snake and food will be red
         
