@@ -22,7 +22,6 @@
 
 module vga640x480(
     input wire i_clk,           // base clock
-    input wire i_rst,
     input wire i_pix_stb,       // pixel clock strobe
     output wire o_hs,           // horizontal sync
     output wire o_vs,           // vertical sync
@@ -58,11 +57,6 @@ module vga640x480(
 
     always @ (posedge i_clk) 
     begin
-        if (i_rst)  // reset to start of frame
-        begin
-            h_count <= 0;
-            v_count <= 0;
-        end
         if (i_pix_stb)  // once per pixel
         begin
             if (h_count == LINE)  // end of line
